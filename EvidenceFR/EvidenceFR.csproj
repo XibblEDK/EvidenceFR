@@ -1,9 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<LangVersion>10.0</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RagePluginHook" Version="1.98.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <Reference Include="LSPD First Response">
+		  <HintPath>..\packages\LSPDFR\LSPD First Response.dll</HintPath>
+		  <Private>False</Private>
+	  </Reference>
+  </ItemGroup>
 
 </Project>
