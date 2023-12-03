@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <Reference Include="CalloutInterfaceAPI">
+	    <HintPath>..\packages\CalloutInterfaceAPI\CalloutInterfaceAPI.dll</HintPath>
+	  </Reference>
 	  <Reference Include="LSPD First Response">
 		  <HintPath>..\packages\LSPDFR\LSPD First Response.dll</HintPath>
 		  <Private>False</Private>

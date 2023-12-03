@@ -1,4 +1,7 @@
-﻿using Rage;
+﻿using EvidenceFR.Callouts;
+using LSPD_First_Response.Mod.API;
+using LSPD_First_Response.Mod.Callouts;
+using Rage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +28,7 @@ namespace EvidenceFR
         {
             // Start processes and load .INI file.
             Settings.Instance.Load();
+            this.RegisterCallouts();
             Game.DisplayNotification("Succesfully loaded EvidenceFR");
             this.SubscribeToEvents();
         }
@@ -51,5 +55,12 @@ namespace EvidenceFR
         }
 
         // Rest of class is used for private important functions and functions for subscribed events.
+
+        private void RegisterCallouts()
+        {
+            LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIDrugDealUnderControl));
+            LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIFIBAgentMurdered));
+            LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIMurder));
+        }
     }
 }
