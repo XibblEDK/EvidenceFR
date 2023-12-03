@@ -61,6 +61,7 @@ namespace EvidenceFR
             LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIDrugDealUnderControl));
             LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIFIBAgentMurdered));
             LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIMurder));
+            LSPD_First_Response.Mod.API.Functions.RegisterCallout(typeof(CSIOldCaseResurrection));
         }
     }
 }
