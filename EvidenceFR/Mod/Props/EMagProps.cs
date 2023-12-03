@@ -43,7 +43,7 @@ namespace EvidenceFR.Mod.Props
         public static EMagProps PistolSMGMag => new("w_pi_pistolsmg_m31_mag1", "Pistol SMG Mag");
         public static EMagProps ExtendedPistolSMGMag => new("w_pi_pistolsmg_m31_mag2", "Extended Pistol SMG Mag");
 
-        public EMagProps(string propModelName, string name)
-            : base(propModelName, name) { }
+        public EMagProps(string propModelName, string displayName)
+            : base(propModelName, displayName) { }
     }
 }

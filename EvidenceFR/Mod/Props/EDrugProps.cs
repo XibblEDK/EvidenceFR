@@ -14,7 +14,7 @@ namespace EvidenceFR.Mod.Props
         public static EDrugProps NeedleAndDrugTubes => new("v_61_bed1_mesh_drugstuff", "Needle And Drug Tubes");
         public static EDrugProps WeedBottle => new("prop_weed_bottle", "Weed Bottle");
 
-        public EDrugProps(string propModelName, string name)
-            : base(propModelName, name) { }
+        public EDrugProps(string propModelName, string displayName)
+            : base(propModelName, displayName) { }
     }
 }
