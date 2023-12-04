@@ -1,10 +1,8 @@
-<<<<<<< Updated upstream
 ﻿using EvidenceFR.Callouts;
+using EvidenceFR.Functions.Object;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
-=======
 ﻿using EvidenceFR.Functions.Object;
->>>>>>> Stashed changes
 using Rage;
 using System;
 using System.Collections.Generic;

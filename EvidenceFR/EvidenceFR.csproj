@@ -7,18 +7,17 @@
 	<LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
-<<<<<<< Updated upstream
-	  <Reference Include="CalloutInterfaceAPI">
-	    <HintPath>..\packages\CalloutInterfaceAPI\CalloutInterfaceAPI.dll</HintPath>
-	  </Reference>
-=======
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="RAGENativeUI" Version="1.9.2" />
     <PackageReference Include="RagePluginHook" Version="1.98.0" />
   </ItemGroup>
 
   <ItemGroup>
->>>>>>> Stashed changes
 	  <Reference Include="LSPD First Response">
 	    <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAV\plugins\LSPD First Response.dll</HintPath>
 	  </Reference>

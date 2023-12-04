@@ -1,10 +1,13 @@
 ﻿using EvidenceFR.Utils;
 using Rage;
+using Rage.Native;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EvidenceFR.Functions.Object
 {
@@ -148,6 +151,73 @@ namespace EvidenceFR.Functions.Object
         private void StopEvidenceFiber()
         {
             isEvidenceFiberRunning = false;
+        }
+
+        public void Preview()
+        {
+            if (!Entity) return;
+            if(EvidenceManager.isAnyEntityBeingPreviewed)
+            {
+                Game.DisplaySubtitle("~r~Another evidence is already being previewed at the moment."); 
+                return;
+            }
+
+
+            GameFiber.StartNew(delegate
+            {
+                bool inEvidencePreview = true;
+                EvidenceManager.isAnyEntityBeingPreviewed = true;
+                Entity.Model.LoadAndWait();
+                Rage.Object deer = new Rage.Object(Entity.Model, Game.LocalPlayer.Character.Position + new Vector3(3f, 0, 0));
+                Camera camera = new Camera(true);
+                Game.DisplaySubtitle(evidenceName);
+                camera.Position = Game.LocalPlayer.Character.Position + new Vector3(1, 0, 0.5f);
+                camera.Face(deer);
+                GameFiber.StartNew(delegate
+                {
+                    GameFiber.SleepUntil(() => Game.IsKeyDown(Keys.Space), 100000);
+                    inEvidencePreview = false;
+                    if (deer) deer.Delete();
+                    if (camera) camera.Delete();
+                    EvidenceManager.isAnyEntityBeingPreviewed = false;
+                });
+
+                while (inEvidencePreview)
+                {
+                    GameFiber.Yield();
+                    if (!deer || !camera) break;
+                    NativeFunction.Natives.SET_​MOUSE_​CURSOR_​THIS_​FRAME();
+
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 24, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 69, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 70, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 92, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 114, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 121, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 140, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 141, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 142, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 257, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 263, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 264, true); // Attack
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 331, true); // Attack
+
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 14, true); // Weapon Wheel 
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 15, true); // Weapon Wheel
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 16, true); // Weapon Wheel
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 17, true); // Weapon Wheel
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 261, true); // Weapon Wheel
+                    NativeFunction.Natives.DISABLE_CONTROL_ACTION(0, 262, true); // Weapon Wheel
+
+                    Vector3 traceStart;
+                    Vector3 traceDir;
+                    bool work = World.ConvertScreenPositionToTrace(camera, new Vector2(Cursor.Position.X, Cursor.Position.Y), out traceStart, out traceDir);
+                    traceDir = traceDir * 50000 * -1;
+                    if (deer) deer.Face(traceDir);
+                    if (Game.IsControlJustPressed(0, GameControl.VehicleCinematicDownOnly)) camera.FOV += 3;
+                    if (Game.IsControlJustPressed(0, GameControl.VehicleCinematicUpOnly)) camera.FOV -= 3;
+                }
+            });
         }
 
     }
