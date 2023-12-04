@@ -18,6 +18,7 @@ namespace EvidenceFR
                 return;
             EvidenceFR.Instance.Stop();
             this.isRunning = false;
+            
         }
 
         private void Functions_OnOnDutyStateChanged(bool onDuty)
