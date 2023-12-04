@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 ﻿using EvidenceFR.Callouts;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
+=======
+﻿using EvidenceFR.Functions.Object;
+>>>>>>> Stashed changes
 using Rage;
 using System;
 using System.Collections.Generic;
@@ -26,7 +30,11 @@ namespace EvidenceFR
 
         public void Start()
         {
+
+            // Start the Evidence Managers clue collecting fiber
+            EvidenceManager.CheckClues();
             // Start processes and load .INI file.
+            
             Settings.Instance.Load();
             this.RegisterCallouts();
             Game.DisplayNotification("Succesfully loaded EvidenceFR");
@@ -35,6 +43,12 @@ namespace EvidenceFR
 
         public void Stop()
         {
+
+            foreach(EvidenceEntity ent in EvidenceManager.evidenceEntityPool)
+            {
+                ent.DeleteEvidence();
+            }
+
             // Stop processes.
             this.UnsubscribeToEvents();
         }
