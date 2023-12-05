@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

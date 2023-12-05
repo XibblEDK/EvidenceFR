@@ -1,8 +1,10 @@
 ﻿using EvidenceFR.Functions.Object;
+using Rage;
 using RAGENativeUI;
 using RAGENativeUI.Elements;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -21,6 +23,7 @@ namespace EvidenceFR.Mod
 
         private static readonly List<UIMenuItem> CasesList = new List<UIMenuItem>();
         private static readonly Dictionary<int, UIMenu> CaseMenus = new Dictionary<int, UIMenu>();
+        private static readonly Dictionary<int, UIMenu> EvidenceMenus = new Dictionary<int, UIMenu>();
 
         internal static EvidenceCase CurrentCase;
         internal static EvidenceEntity CurrentEvidence;
@@ -30,6 +33,7 @@ namespace EvidenceFR.Mod
             EvidenceFR.Instance.menuPool.Add(Menu);
             Menu.MouseControlsEnabled = false;
             Menu.AllowCameraMovement = true;
+            Menu.TitleStyle = new TextStyle(TextFont.ChaletLondon, Color.White);
 
             Menu.AddItems(CasesMenuItem);
             Menu.BindMenuToItem(CasesMenu, CasesMenuItem);
@@ -51,6 +55,28 @@ namespace EvidenceFR.Mod
         {
             CaseMenus[evidenceEntity.parentCase.caseId].MenuItems[evidenceEntity.evidenceID].Text = evidenceEntity.EvidenceName;
             CaseMenus[evidenceEntity.parentCase.caseId].MenuItems[evidenceEntity.evidenceID].Description = evidenceEntity.Found.ToString();
+
+            UIMenu uIMenu = CreateEvidenceMenu(evidenceEntity);
+            EvidenceFR.Instance.menuPool.Add(uIMenu);
+        }
+
+        private static UIMenu CreateEvidenceMenu(EvidenceEntity evidenceEntity)
+        {
+            UIMenu uiMenu = new UIMenu(evidenceEntity.EvidenceName, evidenceEntity.evidenceID.ToString());
+            EvidenceFR.Instance.menuPool.Add(uiMenu);
+            CaseMenus[evidenceEntity.parentCase.caseId].BindMenuToItem(uiMenu, CaseMenus[evidenceEntity.parentCase.caseId].MenuItems[evidenceEntity.evidenceID]);
+
+            // Create evidence options.
+
+            UIMenuItem preview = new UIMenuItem("Preview Evidence");
+            preview.Activated += (s, e) =>
+            {
+                Menu.Visible = false;
+                evidenceEntity.Preview();
+            };
+            uiMenu.AddItem(preview);
+
+            return uiMenu;
         }
 
         private static void OnCaseAdded(EvidenceCase newEvidenceCase)

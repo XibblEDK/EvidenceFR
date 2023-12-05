@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 using EvidenceFR.Callouts;
-=======
 ﻿using EvidenceFR.Callouts;
 using EvidenceFR.Functions.Object;
->>>>>>> 4da6cec8166153eecde03dfe02d2682a61f25fc4
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 ﻿using EvidenceFR.Functions.Object;
@@ -43,7 +40,7 @@ namespace EvidenceFR
             EvidenceManager.CheckClues();
             // Start processes and load .INI file.
             Settings.Instance.Load();
-            this.RegisterCallouts();
+            //this.RegisterCallouts();
             Game.DisplayNotification("Succesfully loaded EvidenceFR");
             this.SubscribeToEvents();
         }
@@ -87,18 +84,25 @@ namespace EvidenceFR
 
         private void StartMenuDraw()
         {
-            while (Main.IsOnDuty)
+            try
             {
-                GameFiber.Yield();
-
-                //Logging.Log(Logging.LogLevel.Debug, "WEEEE");
-
-                menuPool.ProcessMenus();
-
-                if (Game.IsKeyDown(System.Windows.Forms.Keys.NumPad3))
+                while (Main.IsOnDuty)
                 {
-                    EvidenceFRMainMenu.Menu.Visible = true;
+                    GameFiber.Yield();
+
+                    menuPool.ProcessMenus();
+
+                    if (Game.IsKeyDown(System.Windows.Forms.Keys.NumPad3))
+                    {
+                        menuPool.CloseAllMenus();
+                        EvidenceFRMainMenu.Menu.Visible = true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logging.Log(Logging.LogLevel.Error, ex.Message);
+                Logging.Log(Logging.LogLevel.Error, ex.StackTrace);
             }
         }
     }
