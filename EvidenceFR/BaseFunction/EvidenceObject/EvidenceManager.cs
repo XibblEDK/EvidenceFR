@@ -17,6 +17,7 @@ namespace EvidenceFR.Functions.Object
         private static List<EvidenceCase> evidenceCases = new List<EvidenceCase>();
         public static List<EvidenceEntity> evidenceEntityPool = new List<EvidenceEntity>();
         private static int TickDelay = 1;
+        public static bool isAnyEntityBeingPreviewed = false;
 
         public static EvidenceEntity GetEvidenceEntityById(int id)
         {

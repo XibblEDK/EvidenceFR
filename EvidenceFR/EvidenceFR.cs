@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 using EvidenceFR.Callouts;
+=======
+﻿using EvidenceFR.Callouts;
+using EvidenceFR.Functions.Object;
+>>>>>>> 4da6cec8166153eecde03dfe02d2682a61f25fc4
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 ﻿using EvidenceFR.Functions.Object;
