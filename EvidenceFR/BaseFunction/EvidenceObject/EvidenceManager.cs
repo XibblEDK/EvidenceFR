@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using EvidenceFR.Mod.Props;
 using Rage.Native;
 using EvidenceFR.Utils;
+using EvidenceFR.Mod;
+using System.Security.Policy;
 
 namespace EvidenceFR.Functions.Object
 {
@@ -16,6 +18,12 @@ namespace EvidenceFR.Functions.Object
         public static List<EvidenceEntity> evidenceEntityPool = new List<EvidenceEntity>();
         private static int TickDelay = 1;
 
+        public static EvidenceEntity GetEvidenceEntityById(int id)
+        {
+            if (evidenceEntityPool.Count == 0)
+                return null;
+            return evidenceEntityPool.ElementAt(id);
+        }
 
         public static void RegisterEntity(EvidenceEntity entity)
         {
@@ -27,7 +35,8 @@ namespace EvidenceFR.Functions.Object
         {
             Logging.Log(Logging.LogLevel.Debug, $"Adding case to Management ({evidenceCase.caseId})");
             evidenceCases.Add(evidenceCase);
-            Logging.Log(Logging.LogLevel.Debug, $"Case added to Management. Total Cases:{evidenceCases.Count} Created Case ID: ({evidenceCase.caseId})");
+            Events.FireEvidenceCaseAdded(evidenceCase);
+            Logging.Log(Logging.LogLevel.Debug, $"Case added to Management and Menu. Total Cases:{evidenceCases.Count} Created Case ID: ({evidenceCase.caseId})");
         }
 
         public static int GetCaseId()
@@ -75,7 +84,6 @@ namespace EvidenceFR.Functions.Object
                         }
                         GameFiber.Wait(100);
                     }
-
 
                     GameFiber.Yield();
                     

@@ -3,6 +3,7 @@ using Rage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,14 +13,24 @@ namespace EvidenceFR.Functions.Object
     {
         public readonly Entity Entity;
         private EvidenceEntity evidence;
-        private int evidenceID;
+        public int evidenceID { get; private set; }
 
         public EvidenceCase parentCase;
         public float DiscoverRange = 2f;
         public bool CanBeDiscoveredByNPCCops = false;
-        
-        
+
+        public event EvidenceFoundEventHandler OnEvidenceFound;
+        public delegate void EvidenceFoundEventHandler(EvidenceEntity evidenceEntity);
+
         private bool canBeDiscovered = true;
+
+        private void FireEvidenceFound()
+        {
+            EvidenceFoundEventHandler evidenceCaseAdded = OnEvidenceFound;
+            if (evidenceCaseAdded == null)
+                return;
+            evidenceCaseAdded(this);
+        }
 
         /// <summary>
         /// Set this to false if you don't want to player to discover this evidence piece.
@@ -39,7 +50,7 @@ namespace EvidenceFR.Functions.Object
         public bool Found
         {
             get { return found; }
-            set { found = value; }
+            set { found = value; FireEvidenceFound(); }
         }
 
         private bool deleteEntityWhenFound = false;
@@ -92,6 +103,7 @@ namespace EvidenceFR.Functions.Object
             }
             Entity = ent;
             evidence = this;
+            this.evidenceID = parentCase.evidenceEntities.Count == 0 ? 0 : parentCase.evidenceEntities.Count;
             this.parentCase = parentCase;
             this.EvidenceName = evidenceName;
             this.EvidenceMarker = evidenceMarker;

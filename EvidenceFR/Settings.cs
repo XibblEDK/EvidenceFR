@@ -11,7 +11,7 @@ namespace EvidenceFR
     internal sealed class Settings
     {
         // Assign variables as needed
-        public Keys MenuKey = Keys.F7;
+        public Keys MenuKey = Keys.NumPad3;
 
         private static InitializationFile config;
         private static Settings instance = (Settings)null;

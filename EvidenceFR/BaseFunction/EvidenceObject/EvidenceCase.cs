@@ -1,4 +1,5 @@
-﻿using EvidenceFR.Utils;
+﻿using EvidenceFR.Mod;
+using EvidenceFR.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace EvidenceFR.Functions.Object
         {
             Logging.Log(Logging.LogLevel.Debug, "Adding Entity " + entity.EvidenceName + " for Case #" + caseId);
             evidenceEntities.Add(entity);
+            Events.FireEvidenceEntityAddedToCase(entity, this);
             entity.parentCase = this; 
         }
 
