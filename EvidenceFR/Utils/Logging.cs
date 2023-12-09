@@ -1,11 +1,4 @@
 ﻿using Rage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvidenceFR.Utils
 {
@@ -18,6 +11,8 @@ namespace EvidenceFR.Utils
             Warning,
             Error
         }
+
+        private static string pluginPrefix = "EvidenceFR: ";
 
         internal static void Log(LogLevel logLevel, string logMessage)
         {
@@ -38,7 +33,7 @@ namespace EvidenceFR.Utils
                     break;
             }
 
-            Game.LogTrivial(logLevelImportance + logMessage);
+            Game.LogTrivial(pluginPrefix + logLevelImportance + logMessage);
         }
 
     }

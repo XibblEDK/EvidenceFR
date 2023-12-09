@@ -1,18 +1,11 @@
+using DamageTrackerLib;
 using EvidenceFR.Callouts;
-﻿using EvidenceFR.Callouts;
 using EvidenceFR.Functions.Object;
-using LSPD_First_Response.Mod.API;
-using LSPD_First_Response.Mod.Callouts;
-﻿using EvidenceFR.Functions.Object;
-using Rage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RAGENativeUI;
 using EvidenceFR.Mod;
 using EvidenceFR.Utils;
+using Rage;
+using RAGENativeUI;
+using System;
 
 namespace EvidenceFR
 {
@@ -20,12 +13,12 @@ namespace EvidenceFR
     {
         private static EvidenceFR instance;
         public MenuPool menuPool;
-        
+
         public static EvidenceFR Instance
         {
             get
             {
-                if (EvidenceFR.instance == null) 
+                if (EvidenceFR.instance == null)
                     EvidenceFR.instance = new EvidenceFR();
                 return EvidenceFR.instance;
             }
@@ -33,7 +26,11 @@ namespace EvidenceFR
 
         public void Start()
         {
+            Logging.Log(Logging.LogLevel.Debug, "Starting DamageTrackerService");
+            DamageTrackerService.Start();
+            Logging.Log(Logging.LogLevel.Debug, "DamageTrackerService started successfully");
             menuPool = new MenuPool();
+            TextureRendererManager.InitializeTextures();
             GameFiber.StartNew(EvidenceFRMainMenu.SetupMenu);
             GameFiber.StartNew(StartMenuDraw);
             // Start the Evidence Managers clue collecting fiber
@@ -47,8 +44,11 @@ namespace EvidenceFR
 
         public void Stop()
         {
+            Logging.Log(Logging.LogLevel.Debug, "Starting DamageTrackerService");
+            DamageTrackerService.Stop();
+            Logging.Log(Logging.LogLevel.Debug, "Stopping DamageTrackerService");
 
-            foreach(EvidenceEntity ent in EvidenceManager.evidenceEntityPool)
+            foreach (EvidenceEntity ent in EvidenceManager.evidenceEntityPool)
             {
                 ent.DeleteEvidence();
             }
@@ -64,12 +64,29 @@ namespace EvidenceFR
 
         private void SubscribeToEvents()
         {
+            Logging.Log(Logging.LogLevel.Debug, "Subscribing to events..");
+            Logging.Log(Logging.LogLevel.Debug, "Subscribing DamageTracker Event");
+            DamageTrackerService.OnPedTookDamage += DamageTracker.HandleDamage;
+            Logging.Log(Logging.LogLevel.Debug, "DamageTracker Event subscribed successfully");
             // Subscribe to events as needed.
+
+
+            // End of subscription
+            Logging.Log(Logging.LogLevel.Debug, "Subscribing to events was successful");
         }
 
         private void UnsubscribeToEvents()
         {
+            Logging.Log(Logging.LogLevel.Debug, "Unsubscribing to events..");
+            Logging.Log(Logging.LogLevel.Debug, "Unsubscribing DamageTracker Event");
+            DamageTrackerService.OnPedTookDamage -= DamageTracker.HandleDamage;
+            Logging.Log(Logging.LogLevel.Debug, "DamageTracker Event unsubscribed successfully");
             // Unsubscribe to events as needed.
+
+
+
+            // End of unsubscription
+            Logging.Log(Logging.LogLevel.Debug, "Unsubscribing to events was successful");
         }
 
         // Rest of class is used for private important functions and functions for subscribed events.
@@ -92,10 +109,18 @@ namespace EvidenceFR
 
                     menuPool.ProcessMenus();
 
-                    if (Game.IsKeyDown(System.Windows.Forms.Keys.NumPad3))
+                    if (Game.IsKeyDown(System.Windows.Forms.Keys.F6))
                     {
-                        menuPool.CloseAllMenus();
-                        EvidenceFRMainMenu.Menu.Visible = true;
+
+                        if (!EvidenceManager.isAnyEntityBeingPreviewed)
+                        {
+                            menuPool.CloseAllMenus();
+                            EvidenceFRMainMenu.Menu.Visible = true;
+                        }
+                        else
+                        {
+                            Game.DisplaySubtitle("~r~Please exit the evidence preview before opening the menu.");
+                        }
                     }
                 }
             }

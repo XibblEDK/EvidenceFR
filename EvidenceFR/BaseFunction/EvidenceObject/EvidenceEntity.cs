@@ -1,13 +1,7 @@
 ﻿using EvidenceFR.Utils;
 using Rage;
 using Rage.Native;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+using RAGENativeUI;
 using System.Windows.Forms;
 
 namespace EvidenceFR.Functions.Object
@@ -114,15 +108,15 @@ namespace EvidenceFR.Functions.Object
             EvidenceManager.RegisterEntity(this);
             Logging.Log(Logging.LogLevel.Debug, "Calling Fiber Function (" + EvidenceName + ")");
             StartEvidenceFiber();
-            
+
         }
 
         public void DeleteEvidence()
         {
             Logging.Log(Logging.LogLevel.Debug, $"Deleting Evidence ({EvidenceName})");
-            StopEvidenceFiber(); 
+            StopEvidenceFiber();
 
-            if(Entity)
+            if (Entity)
             {
                 Logging.Log(Logging.LogLevel.Debug, $"Removing Evidence ({EvidenceName}) from Case");
                 parentCase.RemoveEvidenceEntity(this);
@@ -143,7 +137,7 @@ namespace EvidenceFR.Functions.Object
             isEvidenceFiberRunning = true;
             GameFiber.StartNew(delegate
             {
-                while(isEvidenceFiberRunning)
+                while (isEvidenceFiberRunning)
                 {
                     GameFiber.Yield();
                     if (!Entity)
@@ -152,9 +146,9 @@ namespace EvidenceFR.Functions.Object
                         break;
                     }
 
-                    if(DrawMarkerAfterFound & found)
+                    if (DrawMarkerAfterFound & found)
                     {
-                        EvidenceMarker.Draw(Entity.Position+MarkerOffset);
+                        EvidenceMarker.Draw(Entity.Position + MarkerOffset);
                     }
                 }
             }, $"EvidenceFiber (C:{parentCase.caseId}.{evidenceName})");
@@ -168,11 +162,13 @@ namespace EvidenceFR.Functions.Object
         public void Preview()
         {
             if (!Entity) return;
-            if(EvidenceManager.isAnyEntityBeingPreviewed)
+            if (EvidenceManager.isAnyEntityBeingPreviewed)
             {
-                Game.DisplaySubtitle("~r~Another evidence is already being previewed at the moment."); 
+                Game.DisplaySubtitle("~r~Another evidence is already being previewed at the moment.");
                 return;
             }
+
+            Game.DisplayHelp($"Press {Keys.Space.GetInstructionalId()} to exit the object preview.");
 
 
             GameFiber.StartNew(delegate

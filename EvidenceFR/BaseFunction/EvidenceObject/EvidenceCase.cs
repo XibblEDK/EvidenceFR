@@ -1,10 +1,8 @@
 ﻿using EvidenceFR.Mod;
 using EvidenceFR.Utils;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+
 
 namespace EvidenceFR.Functions.Object
 {
@@ -18,13 +16,13 @@ namespace EvidenceFR.Functions.Object
 
         public EvidenceCase()
         {
+
             Logging.Log(Logging.LogLevel.Debug, "Creating new Case...");
             caseId = EvidenceManager.GetCaseId();
             Logging.Log(Logging.LogLevel.Debug, "Case ID: " + caseId);
             Logging.Log(Logging.LogLevel.Debug, "Registering Case to Manager");
             EvidenceManager.AddCase(this);
             Logging.Log(Logging.LogLevel.Debug, "Case successfully created");
-
         }
 
         public void AddEvidenceEntity(EvidenceEntity entity)
@@ -32,7 +30,7 @@ namespace EvidenceFR.Functions.Object
             Logging.Log(Logging.LogLevel.Debug, "Adding Entity " + entity.EvidenceName + " for Case #" + caseId);
             evidenceEntities.Add(entity);
             Events.FireEvidenceEntityAddedToCase(entity, this);
-            entity.parentCase = this; 
+            entity.parentCase = this;
         }
 
         public void RemoveEvidenceEntity(EvidenceEntity entity)

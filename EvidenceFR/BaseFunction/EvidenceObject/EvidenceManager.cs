@@ -1,14 +1,11 @@
-﻿using System;
+﻿using DamageTrackerLib.DamageInfo;
+using EvidenceFR.BaseFunction.EvidenceObject;
+using EvidenceFR.Mod;
+using EvidenceFR.Utils;
 using Rage;
+using Rage.Native;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EvidenceFR.Mod.Props;
-using Rage.Native;
-using EvidenceFR.Utils;
-using EvidenceFR.Mod;
-using System.Security.Policy;
 
 namespace EvidenceFR.Functions.Object
 {
@@ -18,6 +15,8 @@ namespace EvidenceFR.Functions.Object
         public static List<EvidenceEntity> evidenceEntityPool = new List<EvidenceEntity>();
         private static int TickDelay = 1;
         public static bool isAnyEntityBeingPreviewed = false;
+
+        private static bool isHitUIEnabled = false;
 
         public static EvidenceEntity GetEvidenceEntityById(int id)
         {
@@ -30,7 +29,7 @@ namespace EvidenceFR.Functions.Object
         {
             Logging.Log(Logging.LogLevel.Debug, $"Adding evidence entity to Pool (C:{entity.parentCase.caseId}.{entity.EvidenceName})");
             evidenceEntityPool.Add(entity);
-        } 
+        }
 
         public static void AddCase(EvidenceCase evidenceCase)
         {
@@ -38,6 +37,81 @@ namespace EvidenceFR.Functions.Object
             evidenceCases.Add(evidenceCase);
             Events.FireEvidenceCaseAdded(evidenceCase);
             Logging.Log(Logging.LogLevel.Debug, $"Case added to Management and Menu. Total Cases:{evidenceCases.Count} Created Case ID: ({evidenceCase.caseId})");
+        }
+
+        private static void EnableHitUI()
+        {
+            isHitUIEnabled = true;
+            //TextureRendererManager.RenderedTextures.Add(TextureRendererManager.headen);
+            TextureRendererManager.RenderedTextures.Add(TextureRendererManager.headdis);
+
+            //TextureRendererManager.RenderedTextures.Add(TextureRendererManager.bodyen);
+            TextureRendererManager.RenderedTextures.Add(TextureRendererManager.bodydis);
+
+            //TextureRendererManager.RenderedTextures.Add(TextureRendererManager.leftarmen);
+            TextureRendererManager.RenderedTextures.Add(TextureRendererManager.leftarmdis);
+
+            //TextureRendererManager.RenderedTextures.Add(TextureRendererManager.rightarmen);
+            TextureRendererManager.RenderedTextures.Add(TextureRendererManager.rightarmdis);
+
+            //TextureRendererManager.RenderedTextures.Add(TextureRendererManager.leftlegen);
+            TextureRendererManager.RenderedTextures.Add(TextureRendererManager.leftlegdis);
+
+            //TextureRendererManager.RenderedTextures.Add(TextureRendererManager.rightlegen);
+            TextureRendererManager.RenderedTextures.Add(TextureRendererManager.rightlegdis);
+        }
+
+        private static void DisableHitUI()
+        {
+            isHitUIEnabled = false;
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.headen);
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.headdis);
+
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.bodyen);
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.bodydis);
+
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.leftarmen);
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.leftarmdis);
+
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.rightarmen);
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.rightarmdis);
+
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.leftlegen);
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.leftlegdis);
+
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.rightlegen);
+            TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.rightlegdis);
+        }
+
+        private static void ToggleHitBoneUI(Limb limb)
+        {
+            switch(limb)
+            {
+                case Limb.Head:
+                    TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.headdis);
+                    TextureRendererManager.RenderedTextures.Add(TextureRendererManager.headen);
+                    break;
+                case Limb.Chest:
+                    TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.bodydis);
+                    TextureRendererManager.RenderedTextures.Add(TextureRendererManager.bodyen);
+                    break;
+                case Limb.LeftArm:
+                    TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.leftarmdis);
+                    TextureRendererManager.RenderedTextures.Add(TextureRendererManager.leftarmen);
+                    break;
+                case Limb.RightArm:
+                    TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.rightarmdis);
+                    TextureRendererManager.RenderedTextures.Add(TextureRendererManager.rightarmen);
+                    break;
+                case Limb.LeftLeg:
+                    TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.leftlegdis);
+                    TextureRendererManager.RenderedTextures.Add(TextureRendererManager.leftlegen);
+                    break;
+                case Limb.RightLeg:
+                    TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.rightlegdis);
+                    TextureRendererManager.RenderedTextures.Add(TextureRendererManager.rightlegen);
+                    break;
+            }
         }
 
         public static int GetCaseId()
@@ -57,7 +131,7 @@ namespace EvidenceFR.Functions.Object
 
         public static void CheckClues()
         {
-            if(IsCheckingForClues)
+            if (IsCheckingForClues)
             {
                 Logging.Log(Logging.LogLevel.Warning, $"WARNING: You tried to run CheckClues two times. This is impossible! Method: " + new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().Name);
                 return;
@@ -67,9 +141,9 @@ namespace EvidenceFR.Functions.Object
             Logging.Log(Logging.LogLevel.Debug, $"Checking clues Fiber starting..");
             GameFiber.StartNew(delegate
             {
-                while(true)
+                while (true)
                 {
-                    if(Game.IsKeyDown(System.Windows.Forms.Keys.F7))
+                    if (Game.IsKeyDown(System.Windows.Forms.Keys.F7))
                     {
 
                         EvidenceCase testCase = new EvidenceCase();
@@ -77,17 +151,40 @@ namespace EvidenceFR.Functions.Object
                         model.LoadAndWait();
                         for (int i = 0; i < 10; i++)
                         {
-                            
-                            Rage.Object obj = new Rage.Object("xm_prop_x17_corpse_01", Game.LocalPlayer.Character.Position.Around2D(5,14));
+
+                            Rage.Object obj = new Rage.Object("xm_prop_x17_corpse_01", Game.LocalPlayer.Character.Position.Around2D(5, 14));
                             NativeFunction.Natives.PLACE_OBJECT_ON_GROUND_OR_OBJECT_PROPERLY(obj);
-                            EvidenceEntity evidenceEntity = new EvidenceEntity(obj, testCase, "Corpse-"+i, new Utils.EvidenceMarker());
+                            EvidenceEntity evidenceEntity = new EvidenceEntity(obj, testCase, "Corpse-" + i, new Utils.EvidenceMarker());
                             evidenceEntity.DiscoverRange = 1.5f;
                         }
                         GameFiber.Wait(100);
                     }
 
-                    GameFiber.Yield();
-                    
+                    GameFiber.Wait(5);
+
+                    Ped closestPed = World.GetAllPeds().Where(p => p & p.IsDead & p.DistanceTo(Game.LocalPlayer.Character) < 3 & EvidencePedManager.IsDamageEventOfPedestrianCollected(p)).FirstOrDefault();
+                    if (closestPed)
+                    {
+                        if (Game.IsKeyDown(System.Windows.Forms.Keys.F11))
+                        {
+                            if(!isHitUIEnabled)
+                            {
+                                EnableHitUI();
+                                Game.DisplayNotification("Times hit: (And enabling ui) " + EvidencePedManager.GetDamageEventInfos(closestPed).Count());
+                                
+                                EvidencePedManager.GetDamageEventInfos(closestPed).ForEach(eI =>
+                                {
+                                    ToggleHitBoneUI(eI.pedDamageInfo.BoneInfo.Limb);
+                                });
+                            } else
+                            {
+                                DisableHitUI();
+                            }
+                            
+                        }
+                        Game.DisplaySubtitle("Distance To nearby ped: " + closestPed.DistanceTo(Game.LocalPlayer.Character));
+                    }
+
                     foreach (EvidenceCase evidenceCase in evidenceCases)
                     {
                         Logging.Log(Logging.LogLevel.Debug, "Iterating Cases. Entity Count: " + evidenceCase.evidenceEntities.Count + " CaseID: " + evidenceCase.caseId);
@@ -110,8 +207,8 @@ namespace EvidenceFR.Functions.Object
                         }
                     }
                 }
-            },"CheckClues-Fiber (EvidenceManager.cs)");
-            
+            }, "CheckClues-Fiber (EvidenceManager.cs)");
+
         }
     }
 }

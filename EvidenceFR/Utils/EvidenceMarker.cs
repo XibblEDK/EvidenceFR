@@ -1,10 +1,5 @@
 ﻿using Rage;
 using Rage.Native;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvidenceFR.Utils
 {
@@ -23,11 +18,11 @@ namespace EvidenceFR.Utils
         public bool RotateContinuously = false;
 
 
-        public EvidenceMarker(int markerType = 0, float scaleX = 0.5f, float scaleY = 0.5f, float scaleZ = 0.5f, int R=255, int G=0, int B=0, int Alpha = 100, bool BobUpAndDown = true, bool FaceCamera = false, bool RotateContinuously = false)
+        public EvidenceMarker(int markerType = 0, float scaleX = 0.5f, float scaleY = 0.5f, float scaleZ = 0.5f, int R = 255, int G = 0, int B = 0, int Alpha = 100, bool BobUpAndDown = true, bool FaceCamera = false, bool RotateContinuously = false)
         {
             this.markerType = markerType;
             this.scaleX = scaleX;
-            this.scaleY = scaleY; 
+            this.scaleY = scaleY;
             this.scaleZ = scaleZ;
             this.R = R;
             this.G = G;
@@ -40,7 +35,7 @@ namespace EvidenceFR.Utils
 
         public void Draw(Vector3 position)
         {
-            NativeFunction.Natives.DRAW_​MARKER(markerType, position, 0,0,0, 0,0,0, scaleX, scaleY, scaleZ, R, G, B, Alpha, BobUpAndDown, FaceCamera, 0, RotateContinuously, 0, 0, false);
+            NativeFunction.Natives.DRAW_​MARKER(markerType, position, 0, 0, 0, 0, 0, 0, scaleX, scaleY, scaleZ, R, G, B, Alpha, BobUpAndDown, FaceCamera, 0, RotateContinuously, 0, 0, false);
         }
 
     }
