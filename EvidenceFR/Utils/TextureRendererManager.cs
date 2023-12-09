@@ -84,6 +84,11 @@ namespace EvidenceFR.Utils
             Game.RawFrameRender += s_renderTextures;
         }
 
+        public static void UnsubscribeRenderer()
+        {
+            Game.RawFrameRender -= s_renderTextures;
+        }
+
         private static void s_renderTextures(object s, GraphicsEventArgs e)
         {
             //e.Graphics.DrawTexture(bodydis, new RectangleF(Game.Resolution.Width / 2 - bodydis.Size.Width / 2, Game.Resolution.Height / 2 - bodydis.Size.Height / 2, bodydis.Size.Width, bodydis.Size.Height));

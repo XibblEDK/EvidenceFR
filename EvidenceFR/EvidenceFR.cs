@@ -48,6 +48,8 @@ namespace EvidenceFR
             DamageTrackerService.Stop();
             Logging.Log(Logging.LogLevel.Debug, "Stopping DamageTrackerService");
 
+            TextureRendererManager.UnsubscribeRenderer();
+
             foreach (EvidenceEntity ent in EvidenceManager.evidenceEntityPool)
             {
                 ent.DeleteEvidence();
