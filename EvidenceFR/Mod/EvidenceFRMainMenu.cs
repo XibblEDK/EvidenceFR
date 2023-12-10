@@ -1,4 +1,5 @@
 ﻿using EvidenceFR.Functions.Object;
+using EvidenceFR.Utils;
 using RAGENativeUI;
 using RAGENativeUI.Elements;
 using System.Collections.Generic;
@@ -8,8 +9,8 @@ namespace EvidenceFR.Mod
 {
     internal static class EvidenceFRMainMenu
     {
-        internal static readonly UIMenu Menu = new("EvidenceFR", "Unveiling truth through meticulous examination and compelling proof.");
-        internal static readonly UIMenu CasesMenu = new("Cases", "Unveiling truth through meticulous examination and compelling proof.");
+        internal static readonly UIMenu Menu = new("EvidenceFR", "Unveiling tthe truth");
+        internal static readonly UIMenu CasesMenu = new("Cases", "Unveiling the truth");
         internal static readonly UIMenu CaseMenu = new("", "Incident Data");
         internal static readonly UIMenu EvidenceMenu = new("Evidence Name", "Evidence Data");
 
@@ -65,10 +66,29 @@ namespace EvidenceFR.Mod
             UIMenuItem preview = new UIMenuItem("Preview Evidence");
             preview.Activated += (s, e) =>
             {
-                Menu.Visible = false;
+                uiMenu.Visible = false;
                 evidenceEntity.Preview();
             };
             uiMenu.AddItem(preview);
+
+            if (evidenceEntity.Attribute != null)
+            {
+                UIMenuItem attributeBinder = new UIMenuItem("Attributes");
+                UIMenu attributeMenu = new UIMenu("Attributes", " ");
+                uiMenu.AddItem(attributeBinder);
+                uiMenu.BindMenuToItem(attributeMenu, attributeBinder);
+                EvidenceFR.Instance.menuPool.Add(attributeMenu);
+
+                if (evidenceEntity.Attribute.FibBadge  != null)
+                {
+                    UIMenuItem fibbadge = new UIMenuItem("FIB Badge");
+                    fibbadge.Activated += (s, e) =>
+                    {
+                        EvidenceManager.EnableAttributeUI(BaseFunction.EvidenceObject.EvidenceAttributeType.FIBBadge);
+                    };
+                    attributeMenu.AddItem(fibbadge);
+                }
+            }
 
             return uiMenu;
         }
@@ -77,7 +97,7 @@ namespace EvidenceFR.Mod
         {
             UIMenuItem caseItem = new UIMenuItem("#" + newEvidenceCase.caseId);
 
-            UIMenu caseSubMenu = new UIMenu(newEvidenceCase.caseId.ToString(), "INCIDENT DATA AND TIME OF CLOCK CALL WAS STARTED");
+            UIMenu caseSubMenu = new UIMenu("#" + newEvidenceCase.caseId, "INCIDENT DATA AND TIME OF CLOCK CALL WAS STARTED");
             CaseMenus.Add(newEvidenceCase.caseId, caseSubMenu);
             EvidenceFR.Instance.menuPool.Add(caseSubMenu);
 
