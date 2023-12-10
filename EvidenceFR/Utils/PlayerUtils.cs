@@ -9,7 +9,7 @@ namespace EvidenceFR.Utils
     internal class PlayerUtils
     {
 
-        public void TakePhoto(EvidenceEntity? evidenceEntity = null)
+        public static void TakePhoto(EvidenceEntity? evidenceEntity = null)
         {
             NativeFunction.Natives.CELL_CAM_ACTIVATE(false, false);
 
@@ -49,6 +49,24 @@ namespace EvidenceFR.Utils
                         }
                         else
                         {
+                            bool photoTaken = false;
+
+                            GameFiber.StartNew(delegate {
+                                while (!photoTaken)
+                                {
+                                    GameFiber.Yield();
+                                    NativeFunction.Natives.HIDE_HUD_AND_RADAR_THIS_FRAME();
+                                    for (int i = 1; i < 23; i++)
+                                    {
+                                        NativeFunction.Natives.HIDE_HUD_COMPONENT_THIS_FRAME(i);
+                                    }
+                                }
+                            }, "Hide-HUD-Fiber");
+
+                            OtherUtils.CaptureApplication("GTA5");
+                            GameFiber.Sleep(100);
+                            // after completion:
+                            photoTaken = true;
                             Game.DisplayHelp("deactivating");
                             NativeFunction.Natives.CELL_CAM_ACTIVATE(false, false);
                             sf.CallFunction("CLOSE_SHUTTER");

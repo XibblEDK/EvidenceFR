@@ -1,4 +1,5 @@
 ﻿using EvidenceFR.Functions.Object;
+using EvidenceFR.Utils;
 using RAGENativeUI;
 using RAGENativeUI.Elements;
 using System.Collections.Generic;
@@ -88,6 +89,14 @@ namespace EvidenceFR.Mod
                     attributeMenu.AddItem(fibbadge);
                 }
             }
+
+            UIMenuItem takePhoto = new UIMenuItem("Take Photo");
+            takePhoto.Activated += (s, e) =>
+            {
+                uiMenu.Visible = false;
+                PlayerUtils.TakePhoto(evidenceEntity);
+            };
+            uiMenu.AddItem(takePhoto);
 
             return uiMenu;
         }
