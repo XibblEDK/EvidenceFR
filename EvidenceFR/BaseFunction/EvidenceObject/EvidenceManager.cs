@@ -17,6 +17,7 @@ namespace EvidenceFR.Functions.Object
         public static bool isAnyEntityBeingPreviewed = false;
 
         private static bool isHitUIEnabled = false;
+        private static bool isAttributeUIEnabled = false;
 
         public static EvidenceEntity GetEvidenceEntityById(int id)
         {
@@ -37,6 +38,30 @@ namespace EvidenceFR.Functions.Object
             evidenceCases.Add(evidenceCase);
             Events.FireEvidenceCaseAdded(evidenceCase);
             Logging.Log(Logging.LogLevel.Debug, $"Case added to Management and Menu. Total Cases:{evidenceCases.Count} Created Case ID: ({evidenceCase.caseId})");
+        }
+
+        public static void EnableAttributeUI(EvidenceAttributeType evidenceAttributeType)
+        {
+            isAttributeUIEnabled = !isAttributeUIEnabled;
+            if (!isAttributeUIEnabled)
+            {
+                switch (evidenceAttributeType)
+                {
+                    case EvidenceAttributeType.FIBBadge:
+                        TextureRendererManager.RenderedTextures.Add(TextureRendererManager.fibbadge);
+                        break;
+                }
+            }
+            else
+            {
+                switch (evidenceAttributeType)
+                {
+                    case EvidenceAttributeType.FIBBadge:
+                        TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.fibbadge);
+                        break;
+                }
+            }
+            
         }
 
         private static void EnableHitUI()
@@ -151,11 +176,20 @@ namespace EvidenceFR.Functions.Object
                         model.LoadAndWait();
                         for (int i = 0; i < 10; i++)
                         {
-
-                            Rage.Object obj = new Rage.Object("xm_prop_x17_corpse_01", Game.LocalPlayer.Character.Position.Around2D(5, 14));
-                            NativeFunction.Natives.PLACE_OBJECT_ON_GROUND_OR_OBJECT_PROPERLY(obj);
-                            EvidenceEntity evidenceEntity = new EvidenceEntity(obj, testCase, "Corpse-" + i, new Utils.EvidenceMarker());
-                            evidenceEntity.DiscoverRange = 1.5f;
+                            if (i == 0)
+                            {
+                                Rage.Object obj = new Rage.Object("xm_prop_x17_corpse_01", Game.LocalPlayer.Character.Position.Around2D(5, 14));
+                                NativeFunction.Natives.PLACE_OBJECT_ON_GROUND_OR_OBJECT_PROPERLY(obj);
+                                EvidenceEntity evidenceEntity = new EvidenceEntity(obj, testCase, "Corpse-" + i, new Utils.EvidenceMarker(), new EvidenceAttribute(new FIBBadge("Adam", "Nielsen", 1)));
+                                evidenceEntity.DiscoverRange = 1.5f;
+                            }
+                            else
+                            {
+                                Rage.Object obj = new Rage.Object("xm_prop_x17_corpse_01", Game.LocalPlayer.Character.Position.Around2D(5, 14));
+                                NativeFunction.Natives.PLACE_OBJECT_ON_GROUND_OR_OBJECT_PROPERLY(obj);
+                                EvidenceEntity evidenceEntity = new EvidenceEntity(obj, testCase, "Corpse-" + i, new Utils.EvidenceMarker());
+                                evidenceEntity.DiscoverRange = 1.5f;
+                            }
                         }
                         GameFiber.Wait(100);
                     }
@@ -196,7 +230,7 @@ namespace EvidenceFR.Functions.Object
                             {
                                 Logging.Log(Logging.LogLevel.Debug, "Entity valid");
                                 // TODO: Evidence Collection By NPC Cops
-                                if (Game.LocalPlayer.Character.DistanceTo(currentEvidenceEntity.Entity.Position) < currentEvidenceEntity.DiscoverRange)
+                                if (Game.LocalPlayer.Character.DistanceTo(currentEvidenceEntity.Entity.Position) < currentEvidenceEntity.DiscoverRange && !currentEvidenceEntity.Found)
                                 {
                                     Logging.Log(Logging.LogLevel.Debug, "Evidence Found");
                                     // Discover

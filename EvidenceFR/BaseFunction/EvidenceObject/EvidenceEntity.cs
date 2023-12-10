@@ -1,4 +1,5 @@
-﻿using EvidenceFR.Utils;
+﻿using EvidenceFR.BaseFunction.EvidenceObject;
+using EvidenceFR.Utils;
 using Rage;
 using Rage.Native;
 using RAGENativeUI;
@@ -13,6 +14,7 @@ namespace EvidenceFR.Functions.Object
         public int evidenceID { get; private set; }
 
         public EvidenceCase parentCase;
+        public EvidenceAttribute? Attribute;
         public float DiscoverRange = 2f;
         public bool CanBeDiscoveredByNPCCops = false;
 
@@ -90,6 +92,28 @@ namespace EvidenceFR.Functions.Object
         /// </summary>
         /// <param name="ent">An existing Rage Entity</param>
         /// <returns></returns>
+        public EvidenceEntity(Entity ent, EvidenceCase parentCase, string evidenceName, EvidenceMarker evidenceMarker, EvidenceAttribute evidenceAttribute)
+        {
+            if (!ent)
+            {
+                // Entity invalid
+                Logging.Log(Logging.LogLevel.Error, "The passed entity was invalid. Evidence was not created!");
+                return;
+            }
+            Entity = ent;
+            evidence = this;
+            this.evidenceID = parentCase.evidenceEntities.Count == 0 ? 0 : parentCase.evidenceEntities.Count;
+            this.parentCase = parentCase;
+            this.Attribute = evidenceAttribute;
+            this.EvidenceName = evidenceName;
+            this.EvidenceMarker = evidenceMarker;
+            parentCase.AddEvidenceEntity(this);
+            EvidenceManager.RegisterEntity(this);
+            Logging.Log(Logging.LogLevel.Debug, "Calling Fiber Function (" + EvidenceName + ")");
+            StartEvidenceFiber();
+
+        }
+        
         public EvidenceEntity(Entity ent, EvidenceCase parentCase, string evidenceName, EvidenceMarker evidenceMarker)
         {
             if (!ent)

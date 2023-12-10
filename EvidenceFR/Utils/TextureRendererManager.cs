@@ -1,4 +1,6 @@
-﻿using Rage;
+﻿using LSPD_First_Response.Mod.API;
+using Rage;
+using Rage.Native;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace EvidenceFR.Utils
 {
     internal class TextureRendererManager
     {
-        private static string basePath = @"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\";
+        private static string basePath = @"\plugins\LSPDFR\EvidenceFR\";
 
         public static Texture headen;
         public static Texture headdis;
@@ -30,6 +33,8 @@ namespace EvidenceFR.Utils
 
         public static Texture rightlegen;
         public static Texture rightlegdis;
+
+        public static Texture fibbadge;
 
         public static List<Texture> RenderedTextures = new List<Texture>();
 
@@ -54,27 +59,31 @@ namespace EvidenceFR.Utils
 
             {"rightlegen.png",rightlegen},
             {"rightlegdis.png",rightlegdis},
+
+            {"fibbadge.png", fibbadge},
         };
         public static void InitializeTextures()
         {
 
-            headen = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\headen.png");
-            headdis = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\headdis.png");
+            headen = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/headen.png");
+            headdis = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/headdis.png");
 
-            bodyen = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\bodyen.png");
-            bodydis = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\bodydis.png");
+            bodyen = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/bodyen.png");
+            bodydis = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/bodydis.png");
 
-            leftarmen = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\leftarmen.png");
-            leftarmdis = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\leftarmdis.png");
+            leftarmen = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/leftarmen.png");
+            leftarmdis = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/leftarmdis.png");
 
-            rightarmen = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\rightarmen.png");
-            rightarmdis = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\rightarmdis.png");
+            rightarmen = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/rightarmen.png");
+            rightarmdis = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/rightarmdis.png");
 
-            leftlegen = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\leftlegen.png");
-            leftlegdis = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\leftlegdis.png");
+            leftlegen = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/leftlegen.png");
+            leftlegdis = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/leftlegdis.png");
 
-            rightlegen = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\rightlegen.png");
-            rightlegdis = Game.CreateTextureFromFile(@"C:\Program Files\Epic Games\GTAV\plugins\LSPDFR\EvidenceFR\rightlegdis.png");
+            rightlegen = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/rightlegen.png");
+            rightlegdis = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/rightlegdis.png");
+
+            fibbadge = Game.CreateTextureFromFile("plugins/LSPDFR/EvidenceFR/fibbadge.png");
 
             s_subscribeRenderer();
         }
@@ -94,7 +103,14 @@ namespace EvidenceFR.Utils
                 {
                     if (txt != null)
                     {
-                        e.Graphics.DrawTexture(txt, Game.Resolution.Width/2 - txt.Size.Width/2/2, Game.Resolution.Height/ 2 - txt.Size.Height/2/2, txt.Size.Width/2, txt.Size.Height/2);
+                        /*if (txt == fibbadge)
+                        {
+                            e.Graphics.DrawTexture(fibbadge, Game.Resolution.Width / 5, Game.Resolution.Height / (float)2.5, fibbadge.Size.Width / 2, fibbadge.Size.Height / 2);
+                        }
+                        else*/
+                        //{
+                        e.Graphics.DrawTexture(txt, Game.Resolution.Width / 2 - txt.Size.Width / 2 / 2, Game.Resolution.Height / 2 - txt.Size.Height / 2 / 2, txt.Size.Width / 2, txt.Size.Height / 2);
+                        //}
                     } else
                     {
                         Logging.Log(Logging.LogLevel.Warning, "Texture is null: " + TexturePaths.FirstOrDefault(x => x.Value == txt).Key.ToString());
