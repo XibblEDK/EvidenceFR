@@ -1,4 +1,5 @@
 using DamageTrackerLib;
+using EvidenceFR.BaseFunction.EvidenceObject;
 using EvidenceFR.Callouts;
 using EvidenceFR.Functions.Object;
 using EvidenceFR.Mod;
@@ -28,6 +29,8 @@ namespace EvidenceFR
         {
             Logging.Log(Logging.LogLevel.Debug, "Starting DamageTrackerService");
             DamageTrackerService.Start();
+            EvidenceVehicleManager.Initialize();
+            EvidencePedManager.Initialize();
             Logging.Log(Logging.LogLevel.Debug, "DamageTrackerService started successfully");
             menuPool = new MenuPool();
             TextureRendererManager.InitializeTextures();

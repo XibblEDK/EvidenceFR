@@ -24,7 +24,7 @@ namespace EvidenceFR.Utils
             attackerPosTOD = attacker.Position;
 
             victimPed = victim;
-            if(victimPed) Logging.Log(Logging.LogLevel.Debug, "victim STILL valid");
+            if (victimPed) Logging.Log(Logging.LogLevel.Debug, "victim STILL valid");
             attackerPed = attacker;
             pedDamageInfo = damageInfo;
 
@@ -80,10 +80,10 @@ namespace EvidenceFR.Utils
                             if (victimPed) Debug.DrawSphere(victimPed.Position - offset, 0.2f, Color.Red);
                             Game.DisplaySubtitle(victimPed.IsValid().ToString());
 
-                            for(float i = 0; i<pos.DistanceTo(hit.HitPosition)*2; i++)
+                            for (float i = 0; i < pos.DistanceTo(hit.HitPosition) * 2; i++)
                             {
                                 Vector3 dir = hit.HitPosition - pos;
-                                Debug.DrawArrow(pos+dir*(i/4), dir, Rotator.Zero, 0.25f, Color.Red);
+                                Debug.DrawArrow(pos + dir * (i / 4), dir, Rotator.Zero, 0.25f, Color.Red);
                             }
 
                         }

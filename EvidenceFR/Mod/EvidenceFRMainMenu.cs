@@ -1,5 +1,4 @@
 ﻿using EvidenceFR.Functions.Object;
-using EvidenceFR.Utils;
 using RAGENativeUI;
 using RAGENativeUI.Elements;
 using System.Collections.Generic;
@@ -79,7 +78,7 @@ namespace EvidenceFR.Mod
                 uiMenu.BindMenuToItem(attributeMenu, attributeBinder);
                 EvidenceFR.Instance.menuPool.Add(attributeMenu);
 
-                if (evidenceEntity.Attribute.FibBadge  != null)
+                if (evidenceEntity.Attribute.FibBadge != null)
                 {
                     UIMenuItem fibbadge = new UIMenuItem("FIB Badge");
                     fibbadge.Activated += (s, e) =>

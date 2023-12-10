@@ -1,14 +1,7 @@
-﻿using LSPD_First_Response.Mod.API;
-using Rage;
-using Rage.Native;
+﻿using Rage;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace EvidenceFR.Utils
 {
@@ -116,13 +109,15 @@ namespace EvidenceFR.Utils
                         //{
                         e.Graphics.DrawTexture(txt, Game.Resolution.Width / 2 - txt.Size.Width / 2 / 2, Game.Resolution.Height / 2 - txt.Size.Height / 2 / 2, txt.Size.Width / 2, txt.Size.Height / 2);
                         //}
-                    } else
+                    }
+                    else
                     {
                         Logging.Log(Logging.LogLevel.Warning, "Texture is null: " + TexturePaths.FirstOrDefault(x => x.Value == txt).Key.ToString());
                     }
                 }
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Game.LogTrivial(ex.ToString());
             }

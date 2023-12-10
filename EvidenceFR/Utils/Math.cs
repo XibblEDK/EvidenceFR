@@ -12,5 +12,17 @@ namespace EvidenceFR.Utils
             return ray;
         }
 
+        public static int Modulus(int x)
+        {
+            if (x > 0) return x;
+            return x * -1;
+        }
+
+        public static float Modulus(float x)
+        {
+            if (x > 0) return x;
+            return x * -1;
+        }
+
     }
 }

@@ -113,7 +113,7 @@ namespace EvidenceFR.Functions.Object
             StartEvidenceFiber();
 
         }
-        
+
         public EvidenceEntity(Entity ent, EvidenceCase parentCase, string evidenceName, EvidenceMarker evidenceMarker)
         {
             if (!ent)

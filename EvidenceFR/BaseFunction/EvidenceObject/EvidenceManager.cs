@@ -61,7 +61,7 @@ namespace EvidenceFR.Functions.Object
                         break;
                 }
             }
-            
+
         }
 
         private static void EnableHitUI()
@@ -110,7 +110,7 @@ namespace EvidenceFR.Functions.Object
 
         private static void ToggleHitBoneUI(Limb limb)
         {
-            switch(limb)
+            switch (limb)
             {
                 case Limb.Head:
                     TextureRendererManager.RenderedTextures.Remove(TextureRendererManager.headdis);
@@ -201,20 +201,21 @@ namespace EvidenceFR.Functions.Object
                     {
                         if (Game.IsKeyDown(System.Windows.Forms.Keys.F11))
                         {
-                            if(!isHitUIEnabled)
+                            if (!isHitUIEnabled)
                             {
                                 EnableHitUI();
                                 Game.DisplayNotification("Times hit: (And enabling ui) " + EvidencePedManager.GetDamageEventInfos(closestPed).Count());
-                                
+
                                 EvidencePedManager.GetDamageEventInfos(closestPed).ForEach(eI =>
                                 {
                                     ToggleHitBoneUI(eI.pedDamageInfo.BoneInfo.Limb);
                                 });
-                            } else
+                            }
+                            else
                             {
                                 DisableHitUI();
                             }
-                            
+
                         }
                         Game.DisplaySubtitle("Distance To nearby ped: " + closestPed.DistanceTo(Game.LocalPlayer.Character));
                     }

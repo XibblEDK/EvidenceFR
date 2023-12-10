@@ -19,7 +19,7 @@ namespace EvidenceFR.BaseFunction.EvidenceObject
             else
             {
                 initialized = true;
-                GarbageCollector();
+                //GarbageCollector();
             }
         }
 
